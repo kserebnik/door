@@ -1,0 +1,37 @@
+// Jenkins Pipeline
+
+def RELEASE_BRANCH = 'release/1.0'
+
+node {
+  stage 'Clean Workspace'
+  // Clean workspace from artifacts from previous run
+
+  stage 'Find branches that need to be built'
+  // Get list of branches ready for merge.
+  // A 'ready for merge branch' will have form for_merge/*
+
+  stage 'Build & Test'
+  // Build & Test each ready-for-merge branch
+  // command:
+  //    Win >gradlew.bat build
+  //    Lin >gradlew build
+
+  stage 'Merge'
+  // Branch that passed build & tests should be merged into RELEASE_BRANCH (not nessesary ff)
+  // Succesfully merged ready-for-merge branch should be deleted
+  // PLEASE DO NOT PUSH MERGE/BRANCH DELETION BACK TO REPOSITORY
+  
+  stage 'Notification'
+  // For all 'ready for merge' branches:
+  //    1) Build - PASSED, Test - PASSED, Merg - PASSED
+  //              SUCCESS mail: should include branch name and release branch name
+  //
+  //    2) Build - PASSED, Test - TEST PASSED, Merge FAILED
+  //              Rebase request: should shurt description of what happened, what
+  //                              need to be done to fix it and branch name and release branch name
+  //    2) Build OR Test - FAILED
+  //              FAILURE Notification: should include failure notification,
+  //                              branch name, release branch name, link to build console log,
+  //                              and attached archive of test reports folder (if exists)
+  
+}
